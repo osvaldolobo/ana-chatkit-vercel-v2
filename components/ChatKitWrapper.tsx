@@ -1,14 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-export default function ChatKitWrapper({ workflow }: { workflow: string }) {
+export default function ChatKitWrapper({ workflow }: { workflow?: string }) {
   const [iframeSrc, setIframeSrc] = useState<string>("");
 
   useEffect(() => {
-    // Monta a URL pública do ChatKit (embed direto)
-    const baseUrl = "https://chat.openai.com/embed/";
-    const fullUrl = `${baseUrl}${workflow}`;
-    setIframeSrc(fullUrl);
+    const id =
+      workflow || process.env.NEXT_PUBLIC_CHATKIT_WORKFLOW_ID || "";
+
+    // ✅ URL correta do embed do Agent Builder
+    const baseUrl = "https://chat.openai.com/embed/workflows/";
+
+    if (id) setIframeSrc(`${baseUrl}${id}`);
   }, [workflow]);
 
   if (!iframeSrc) return <p>Carregando interface da ANA...</p>;
